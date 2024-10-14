@@ -4,7 +4,7 @@ class DbConnect
     private $server = 'localhost';
     private $dbname = 'seznamopravil';
     private $user = 'root';
-    private $pass = '';
+    private $pass = 'root';
 
     public function connect()
     {
