@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import * as S from "./styles";
 import Edit from "../../Img/edit.svg";
 import Erase from "../../Img/erase.svg";
@@ -7,46 +7,64 @@ import { TaskListType } from "../../Contexts/taskType";
 import { DeleteContext } from "../../Contexts/deleteContext";
 import { DeleteType } from "../../Contexts/deleteType";
 
+interface TaskCardProps {
+  id: number;
+  naziv: string;
+  opis: string;
+  kategorija: string;
+  rok: string;
+  opravljeno: boolean;
+}
 
+const TaskCard: React.FC<TaskCardProps> = ({
+  id,
+  naziv,
+  kategorija,
+  opravljeno,
+  rok,
+  opis,
+}) => {
+  const { setShowDelete, setId } = useContext(DeleteContext) as DeleteType;
+  const { checkTask } = useContext(TaskListContext) as TaskListType;
 
-interface TaskCardProps{
-    id:number;
-    name: string;
-    list: string;
-    color: string;
-    done: boolean;
-};
+  // Assuming category and user mappings
+  const categories = ["Low Priority", "Medium Priority", "High Priority"]; // Example categories
+  //const formattedCategory = categories[kategorija] || "Unknown Category";
 
-const TaskCard: React.FC<TaskCardProps> =({id, name,list, color, done})=>{
+  const formattedDate =
+    rok === "0000-00-00 00:00:00"
+      ? "No deadline"
+      : new Date(rok).toLocaleString();
 
-    const{setShowDelete,setId} = useContext(DeleteContext) as DeleteType;
-    const{checkTask} = useContext(TaskListContext) as TaskListType;
-    
-    function handleCheck(){
-        checkTask(id);
-    }
+  function handleCheck() {
+    checkTask(id);
+  }
 
-    function handleDelete(){
-        setShowDelete(true);
-        setId(id);
-    }
+  function handleDelete() {
+    setShowDelete(true);
+    setId(id);
+  }
 
-    return(
-        <S.Container>
-            <S.CheckField>
-                <S.CheckboxRing onClick={handleCheck}><S.CheckFill done={done}/></S.CheckboxRing>
-            </S.CheckField>
-            <S.Description>
-                <S.Name done={done}>{name}</S.Name>
-                <S.ListBelong>
-                    <S.ColorTag color={color}/>
-                    <S.ListName>{list}</S.ListName>
-                </S.ListBelong>
-            </S.Description>
-            
-            <S.Icon src={Edit}/><S.Icon src={Erase} onClick={handleDelete}/>
-        </S.Container>
-    );
+  return (
+    <S.Container>
+      <S.CheckField>
+        <S.CheckboxRing onClick={handleCheck}>
+          <S.CheckFill done={opravljeno} />
+        </S.CheckboxRing>
+      </S.CheckField>
+      <S.Description>
+        <S.Name done={opravljeno}>{naziv}</S.Name>
+        <S.ListBelong>
+          <S.ColorTag color={kategorija} />
+          <S.ListName>{opis}</S.ListName>
+        </S.ListBelong>
+        <S.Deadline>Due: {formattedDate}</S.Deadline>
+      </S.Description>
+
+      <S.Icon src={Edit} />
+      <S.Icon src={Erase} onClick={handleDelete} />
+    </S.Container>
+  );
 };
 
 export default TaskCard;

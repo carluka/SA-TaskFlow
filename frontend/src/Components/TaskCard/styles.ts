@@ -8,6 +8,11 @@ interface DoneProps{
     done:boolean;
 }
 
+export const Deadline = styled.span`
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 8px;
+`;
 export const Container =styled.div`
     height: 80px;
     width: 70vw;
