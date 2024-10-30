@@ -5,104 +5,121 @@ interface ColorTagProps{
 }
 
 interface DoneProps{
-    done:boolean;
+    opravljeno:boolean;
 }
 
 export const Deadline = styled.span`
-  font-size: 0.9rem;
-  color: #999;
-  margin-top: 8px;
+  font-size: 1rem;
+  color: #888;
+  margin-left: 16px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
 `;
 export const Container =styled.div`
-    height: 80px;
+    height: 60px;
     width: 70vw;
     background: white;
-    border-radius: 16px;
-    box-shadow: 0 3px 3px #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    margin: 8px;
-    box-sizing:border-box;
+    margin: 6px 0;
+    padding: 12px;
+    box-sizing: border-box;
+    align-items: center;
 `
 export const Name = styled.h2<DoneProps>`
-    font-size: 22px;
-    color: #555;
-    margin: 8px 16px;
-    font-weight:500;
-
-    ${props => props.done &&
+    font-size: 18px;
+    color: #444;
+    margin: 0 16px 0 0;
+    font-weight: 500;
+    white-space: nowrap;
+    
+    ${props => props.opravljeno &&
     css`
         color:#bbb;
         font-weight:400;
         text-decoration: line-through;`}
 `
 export const Icon = styled.img`
-    width: 24px;
-    margin: 24px;
+    width: 17px;
+    margin: 0 16px;
     background: white;
 
     &:hover{
-        cursor:pointer;
+        cursor: pointer;
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
     }
 `
 export const CheckField = styled.div`
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 100%; 
     border-right: 2px solid #eee ;
     display: flex;
-    align-items:center;
-    justify-content:center;
-`
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+`;
 export const Description = styled.div`
-    height: 80px;
-    width: 50vw;
-    padding: 6px 8px;
+    flex-grow: 1;
+    padding: 6px 16px;
     box-sizing: border-box;
-`
+    display: flex;
+    flex-direction: row; /* Keep it row layout */
+    align-items: center;
+    justify-content: space-between;
+    max-height: 100%;
+    overflow: hidden;
+`;
+
 export const ListBelong = styled.div`
-    height: 20px;
-    margin: 0 16px;
+    height: 24px;
     display: flex;
     align-items: center;
+    margin-left: 8px;
 `
 
 export const ColorTag = styled.div<ColorTagProps>` 
-    height: 16px;
-    width: 16px;
-    border-radius: 6px;
-    background: ${props=> props.color};
+    height: 18px;
+    width: 18px;
+    border-radius: 9px;
+    background: ${props => props.color};
 `
 
 export const ListName = styled.p`
     font-size: 16px;
-    color: #999;
-    margin-left:8px;
-    font-weight:400; 
-`
-
-export const InvisibleCheck = styled.input.attrs({type:'checkbox'})`
-    display: none;
+    color: #666;
+    margin-left: 8px;
+    font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 `
 
 export const CheckboxRing = styled.div`
     background: white;
-    height: 24px;
-    width: 24px;
-    border: 1px solid #7f56da;
-    border-radius:12px;
+    height: 20px;
+    width: 20px;
+    border: 2px solid #7f56da;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.2s ease;
 
     &:hover{
         cursor: pointer;
+        background-color: rgba(127, 86, 218, 0.1);
     }
-
 `
 export const CheckFill = styled.div<DoneProps>`
     background: #7f56da;
     height: 20px;
     width: 20px;
-    border-radius:10px;
-    ${props => !props.done &&
+    border-radius: 11px;
+    ${props => !props.opravljeno &&
     css`display:none;`}
 `

@@ -41,9 +41,6 @@ export const Container = styled.div<ContainerProps>`
     }
 
 `
-
-
-
 export const Icon = styled.img`
     width: 20px;
     margin: 8px 16px;

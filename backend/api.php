@@ -3,6 +3,7 @@ require_once __DIR__ . '/services/Database.php';
 require_once __DIR__ . '/controllers/LoginController.php';
 require_once __DIR__ . '/controllers/RegistrationController.php';
 require_once __DIR__ . '/controllers/TaskController.php';
+require_once __DIR__ . '/controllers/CategorieController.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -41,7 +42,53 @@ switch ($endpoint) {
             echo json_encode(['message' => 'Invalid request method']);
         }
         break;
-
+    case 'addTask':
+        if ($request_method === 'POST') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $taskController = new TaskController();
+            $taskController->addTask($input);
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
+    case 'deleteTask':
+        if ($request_method === 'DELETE') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            log_data($input['id']);
+            if (isset($input['id'])) {
+                $taskController = new TaskController();
+                $taskController->deleteTask($input['id']);
+                echo json_encode(['status' => 'success', 'message' => 'Task deleted successfully']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Task ID is missing']);
+            }
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
+    case 'checkTask':
+        if ($request_method === 'PUT') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            log_data($input);
+            if (isset($input)) {
+                $taskController = new TaskController();
+                $taskController->checkTask($input);
+                echo json_encode(['status' => 'success', 'message' => 'Opravilo uspešno posodobljeno']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Task ID is missing']);
+            }
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
+    case 'getCategories':
+        if ($request_method === 'GET') {
+            $categorieController = new CategorieController();
+            $categorieController->getCategories();
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
     default:
         echo json_encode(['message' => 'Invalid endpoint']);
         break;

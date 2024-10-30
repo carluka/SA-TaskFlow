@@ -46,7 +46,6 @@ const Register: React.FC = () => {
         }
       )
       .then((response) => {
-        console.log("User registered:", response.data);
         setUserData(response.data);
       })
       .catch((error) => {

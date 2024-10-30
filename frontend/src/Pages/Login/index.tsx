@@ -17,7 +17,6 @@ const Login: React.FC = () => {
         password: password,
       })
       .then(function (response) {
-        console.log(response.data);
         if (response.data.status === "success") {
           localStorage.setItem("@Project:email", email);
           setUserData({ email });

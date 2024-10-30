@@ -1,10 +1,10 @@
 export interface CategorieProps{
     id:number;
-    name:string;
-    color:string;
+    naziv:string;
+    opis:string;
 };
 
 export type CategorieContextType = {
     categList: CategorieProps[];
-    
+    setCategList: Function;
 }

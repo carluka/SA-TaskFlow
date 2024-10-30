@@ -5,6 +5,7 @@ import { DeleteContext } from "../../Contexts/deleteContext";
 import { useContext } from "react";
 import { TaskListContext } from "../../Contexts/taskListContext";
 import { TaskListType } from "../../Contexts/taskType";
+import axios from "axios";
 
 const DeleteModal: React.FC = () => {
   const { setShowDelete, id, setId } = useContext(DeleteContext) as DeleteType;
@@ -15,6 +16,14 @@ const DeleteModal: React.FC = () => {
   }
 
   function handleConfirm() {
+    axios
+      .delete("http://localhost:8000/api.php?action=deleteTask", {
+        data: { id: id },
+      })
+      //.then(function (response) {})
+      .catch(function (error) {
+        console.error("There was an error!", error);
+      });
     deleteTask(id);
     setId(0);
     setShowDelete(false);

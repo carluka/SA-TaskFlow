@@ -17,7 +17,7 @@ export const AuthProvider: React.FC<ChildrenProps> = ({ children }) => {
     const email = localStorage.getItem("@Project:email");
 
     if (email) {
-      return { email: JSON.parse(email) };
+      return { email: email };
     } else {
       return { email: "" };
     }

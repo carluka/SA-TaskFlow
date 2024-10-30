@@ -20,22 +20,20 @@ import { AddType } from "../../Contexts/addType";
 import { Link } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import axios from "axios";
-
-interface Task {
-  id: number;
-  naziv: string;
-  opis: string;
-  rok: string;
-  kategorija: string;
-  opravljeno: boolean;
-}
+import { TaskListContext } from "../../Contexts/taskListContext";
+import { TaskListType } from "../../Contexts/taskType";
+import { CategoriesContext } from "../../Contexts/categoriesContext";
+import { CategorieContextType } from "../../Contexts/categoriesType";
 
 const Home: React.FC = () => {
-  const [taskList, setTaskList] = useState<Task[] | null>(null);
-
+  const { taskList, doneTasks, notDoneTasks } = useContext(
+    TaskListContext
+  ) as TaskListType;
+  const { addAllTasks } = useContext(TaskListContext) as TaskListType;
   const { showDelete } = useContext(DeleteContext) as DeleteType;
   const { showAdd } = useContext(AddContext) as AddType;
   const [listToDisplay, setListToDisplay] = useState(0);
+  const { clearAllTasks } = useContext(TaskListContext) as TaskListType;
 
   const [allActive, setAllActive] = useState(true);
   const [doneActive, setDoneActive] = useState(false);
@@ -44,8 +42,15 @@ const Home: React.FC = () => {
   const { setUserData } = useContext(AuthContext) as AuthType;
   const { userData } = useContext(AuthContext) as AuthType;
 
+  const listOfLists = [taskList, doneTasks, notDoneTasks];
+
+  const { setCategList } = useContext(
+    CategoriesContext
+  ) as CategorieContextType;
+
   useEffect(() => {
     fetchTask();
+    fetchCategorie();
   }, []);
 
   function fetchTask() {
@@ -57,7 +62,18 @@ const Home: React.FC = () => {
         },
       })
       .then(function (response) {
-        setTaskList(response.data);
+        addAllTasks(response.data);
+      })
+      .catch(function (error) {
+        console.error("There was an error!", error);
+      });
+  }
+
+  function fetchCategorie() {
+    axios
+      .get("http://localhost:8000/api.php?action=getCategories")
+      .then(function (response) {
+        setCategList(response.data);
       })
       .catch(function (error) {
         console.error("There was an error!", error);
@@ -87,6 +103,7 @@ const Home: React.FC = () => {
 
   function handleLogout() {
     localStorage.removeItem("@Project:email");
+    clearAllTasks();
     setUserData({ email: "" });
   }
 
@@ -140,7 +157,7 @@ const Home: React.FC = () => {
           </S.FilterField>
         </S.TitleAndFilter>
         {taskList && taskList.length > 0 ? (
-          taskList.map((task) => (
+          listOfLists[listToDisplay].map((task) => (
             <TaskCard
               key={task.id}
               id={task.id}
