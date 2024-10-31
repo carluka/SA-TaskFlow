@@ -14,8 +14,13 @@ export const CategoriesContextProvider: React.FC<ChildrenProps> = ({
 }) => {
   const [categList, setCategList] = useState<CategorieProps[]>([]);
 
+  const addCat = (cat: CategorieProps) => {
+    categList.push(cat);
+    setCategList([...categList]);
+  };
+
   return (
-    <CategoriesContext.Provider value={{ categList, setCategList }}>
+    <CategoriesContext.Provider value={{ categList, setCategList, addCat }}>
       {children}
     </CategoriesContext.Provider>
   );

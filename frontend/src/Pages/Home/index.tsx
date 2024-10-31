@@ -24,6 +24,9 @@ import { TaskListContext } from "../../Contexts/taskListContext";
 import { TaskListType } from "../../Contexts/taskType";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 import { CategorieContextType } from "../../Contexts/categoriesType";
+import AddCategorieModal from "../../Components/AddCategorieModal";
+import { AddCategorieContext } from "../../Contexts/addCategorieContext";
+import { AddCategorieType } from "../../Contexts/addCategorieType";
 
 const Home: React.FC = () => {
   const { taskList, doneTasks, notDoneTasks } = useContext(
@@ -32,6 +35,9 @@ const Home: React.FC = () => {
   const { addAllTasks } = useContext(TaskListContext) as TaskListType;
   const { showDelete } = useContext(DeleteContext) as DeleteType;
   const { showAdd } = useContext(AddContext) as AddType;
+  const { showAddCategorie } = useContext(
+    AddCategorieContext
+  ) as AddCategorieType;
   const [listToDisplay, setListToDisplay] = useState(0);
   const { clearAllTasks } = useContext(TaskListContext) as TaskListType;
 
@@ -71,7 +77,9 @@ const Home: React.FC = () => {
 
   function fetchCategorie() {
     axios
-      .get("http://localhost:8000/api.php?action=getCategories")
+      .get("http://localhost:8000/api.php?action=getCategories", {
+        params: { email: userData.email },
+      })
       .then(function (response) {
         setCategList(response.data);
       })
@@ -176,6 +184,7 @@ const Home: React.FC = () => {
       </S.Main>
       {showDelete && <DeleteModal />}
       {showAdd && <AddModal />}
+      {showAddCategorie && <AddCategorieModal />}
     </S.Page>
   );
 };

@@ -83,8 +83,18 @@ switch ($endpoint) {
         break;
     case 'getCategories':
         if ($request_method === 'GET') {
+            $email = $_GET['email'];
             $categorieController = new CategorieController();
-            $categorieController->getCategories();
+            $categorieController->getCategories($email);
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
+    case 'addCategory':
+        if ($request_method === 'POST') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $categorieController = new CategorieController();
+            $categorieController->addCategory($input);
         } else {
             echo json_encode(['message' => 'Invalid request method']);
         }

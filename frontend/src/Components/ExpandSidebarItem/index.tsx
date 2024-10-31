@@ -5,6 +5,7 @@ import CategorieItem from "../Categorie";
 import Add from "../../Img/add.svg";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 import { CategorieContextType } from "../../Contexts/categoriesType";
+import AddCategorie from "../AddCategorie";
 
 interface SidebarItemProps {
   name: string;
@@ -30,10 +31,11 @@ const ExpandSidebarItem: React.FC<SidebarItemProps> = ({ name, icon }) => {
         {categList.map((cat) => (
           <CategorieItem key={cat.id} name={cat.naziv} />
         ))}
-        <S.AddArea>
+        <AddCategorie></AddCategorie>
+        {/*<S.AddArea>
           <S.AddIcon src={Add} />
           <S.AddText>Dodaj</S.AddText>
-        </S.AddArea>
+        </S.AddArea>*/}
       </S.CatArea>
     </S.OuterContainer>
   );
