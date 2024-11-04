@@ -13,20 +13,18 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [geslo, setGeslo] = useState("");
 
-  // Validation error states
   const [imeError, setImeError] = useState<string | null>(null);
   const [priimekError, setPriimekError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  // Password validation states
   const [isLongEnough, setIsLongEnough] = useState(false);
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasLowercase, setHasLowercase] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [hasSpecialChar, setHasSpecialChar] = useState(false);
 
-  // Email regex pattern
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function handleIme(event: React.ChangeEvent<HTMLInputElement>) {
@@ -114,7 +112,7 @@ const Register: React.FC = () => {
             setUserData({ email });
             redirect("/");
           } else {
-            console.log("Error:", response.data.message);
+            setServerError(response.data.message);
           }
         })
         .catch((error) => {
@@ -167,7 +165,6 @@ const Register: React.FC = () => {
         ></S.InputField>
         {passwordError && <S.ErrorMessage>{passwordError}</S.ErrorMessage>}
 
-        {/* Password validation checklist */}
         <S.Checklist>
           <S.CheckItem>
             {isLongEnough ? (
@@ -210,6 +207,9 @@ const Register: React.FC = () => {
             En poseben znak
           </S.CheckItem>
         </S.Checklist>
+        {serverError && (
+          <S.SpecialErrorMessage>{serverError}</S.SpecialErrorMessage>
+        )}
 
         <S.SignIn onClick={handleSubmit}>Registracija</S.SignIn>
         <S.Subtitle>

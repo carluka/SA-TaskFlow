@@ -146,3 +146,8 @@ svg {
   margin-right: 0.5rem;
 }
 `;
+export const SpecialErrorMessage = styled.div`
+color: red;
+font-size: 1rem;
+margin-top: 0.5rem;
+`;
