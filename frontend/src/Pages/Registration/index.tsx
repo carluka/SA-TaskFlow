@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import * as S from "./styles";
 import Logo from "../../Img/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import axios from "axios";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const Register: React.FC = () => {
   const { setUserData } = useContext(AuthContext) as AuthType;
@@ -12,45 +13,114 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [geslo, setGeslo] = useState("");
 
+  // Validation error states
+  const [imeError, setImeError] = useState<string | null>(null);
+  const [priimekError, setPriimekError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  // Password validation states
+  const [isLongEnough, setIsLongEnough] = useState(false);
+  const [hasUppercase, setHasUppercase] = useState(false);
+  const [hasLowercase, setHasLowercase] = useState(false);
+  const [hasNumber, setHasNumber] = useState(false);
+  const [hasSpecialChar, setHasSpecialChar] = useState(false);
+
+  // Email regex pattern
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   function handleIme(event: React.ChangeEvent<HTMLInputElement>) {
-    setIme(event.target.value);
+    const value = event.target.value;
+    setIme(value);
+    setImeError(value ? null : "Ime ne sme biti prazno.");
   }
 
   function handlePriimek(event: React.ChangeEvent<HTMLInputElement>) {
-    setPriimek(event.target.value);
+    const value = event.target.value;
+    setPriimek(value);
+    setPriimekError(value ? null : "Priimek ne sme biti prazen.");
   }
 
   function handleEmail(event: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(event.target.value);
+    const value = event.target.value;
+    setEmail(value);
+    setEmailError(emailRegex.test(value) ? null : "Napačen format e-pošte.");
   }
 
   function handleGeslo(event: React.ChangeEvent<HTMLInputElement>) {
-    setGeslo(event.target.value);
+    const newPassword = event.target.value;
+    setGeslo(newPassword);
+
+    const isLongEnough = newPassword.length >= 8;
+    const hasUppercase = /[A-Z]/.test(newPassword);
+    const hasLowercase = /[a-z]/.test(newPassword);
+    const hasNumber = /\d/.test(newPassword);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+
+    setIsLongEnough(isLongEnough);
+    setHasUppercase(hasUppercase);
+    setHasLowercase(hasLowercase);
+    setHasNumber(hasNumber);
+    setHasSpecialChar(hasSpecialChar);
+
+    if (
+      isLongEnough &&
+      hasUppercase &&
+      hasLowercase &&
+      hasNumber &&
+      hasSpecialChar
+    ) {
+      setPasswordError(null);
+    } else {
+      setPasswordError("Geslo ne izpolnjuje vseh zahtev.");
+    }
   }
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    axios
-      .post(
-        "http://localhost:8000/api.php?action=register",
-        {
-          ime: ime,
-          priimek: priimek,
-          email: email,
-          geslo: geslo,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    if (!ime) setImeError("Ime ne sme biti prazno.");
+    if (!priimek) setPriimekError("Priimek ne sme biti prazen.");
+    if (!emailRegex.test(email)) setEmailError("Napačen format e-pošte.");
+    if (
+      !isLongEnough ||
+      !hasUppercase ||
+      !hasLowercase ||
+      !hasNumber ||
+      !hasSpecialChar
+    ) {
+      setPasswordError("Geslo ne izpolnjuje vseh zahtev.");
+      return;
+    }
+
+    if (!imeError && !priimekError && !emailError && !passwordError) {
+      axios
+        .post(
+          "http://localhost:8000/api.php?action=register",
+          {
+            ime: ime,
+            priimek: priimek,
+            email: email,
+            geslo: geslo,
           },
-        }
-      )
-      .then((response) => {
-        setUserData(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error registering the user!", error);
-      });
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.status === "success") {
+            localStorage.setItem("@Project:email", email);
+            setUserData({ email });
+            redirect("/");
+          } else {
+            console.log("Error:", response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error registering the user!", error);
+        });
+    }
   }
 
   return (
@@ -68,6 +138,7 @@ const Register: React.FC = () => {
           onChange={handleIme}
           placeholder="npr. Janez"
         ></S.InputField>
+        {imeError && <S.ErrorMessage>{imeError}</S.ErrorMessage>}
 
         <S.FieldName>Priimek</S.FieldName>
         <S.InputField
@@ -76,6 +147,7 @@ const Register: React.FC = () => {
           onChange={handlePriimek}
           placeholder="npr. Novak"
         ></S.InputField>
+        {priimekError && <S.ErrorMessage>{priimekError}</S.ErrorMessage>}
 
         <S.FieldName>Email</S.FieldName>
         <S.InputField
@@ -84,6 +156,7 @@ const Register: React.FC = () => {
           onChange={handleEmail}
           placeholder="npr. janez.novak@gmail.com"
         ></S.InputField>
+        {emailError && <S.ErrorMessage>{emailError}</S.ErrorMessage>}
 
         <S.FieldName>Geslo</S.FieldName>
         <S.InputField
@@ -92,11 +165,51 @@ const Register: React.FC = () => {
           type="password"
           onChange={handleGeslo}
         ></S.InputField>
+        {passwordError && <S.ErrorMessage>{passwordError}</S.ErrorMessage>}
 
-        {/*<S.KeepSigned>
-          <S.Checkbox />
-          <S.Subtitle>Remember me</S.Subtitle>
-        </S.KeepSigned>*/}
+        {/* Password validation checklist */}
+        <S.Checklist>
+          <S.CheckItem>
+            {isLongEnough ? (
+              <FaCheckCircle color="green" />
+            ) : (
+              <FaTimesCircle color="red" />
+            )}{" "}
+            8 znakov
+          </S.CheckItem>
+          <S.CheckItem>
+            {hasUppercase ? (
+              <FaCheckCircle color="green" />
+            ) : (
+              <FaTimesCircle color="red" />
+            )}{" "}
+            Ena velika črka
+          </S.CheckItem>
+          <S.CheckItem>
+            {hasLowercase ? (
+              <FaCheckCircle color="green" />
+            ) : (
+              <FaTimesCircle color="red" />
+            )}{" "}
+            Ena mala črka
+          </S.CheckItem>
+          <S.CheckItem>
+            {hasNumber ? (
+              <FaCheckCircle color="green" />
+            ) : (
+              <FaTimesCircle color="red" />
+            )}{" "}
+            Ena številka
+          </S.CheckItem>
+          <S.CheckItem>
+            {hasSpecialChar ? (
+              <FaCheckCircle color="green" />
+            ) : (
+              <FaTimesCircle color="red" />
+            )}{" "}
+            En poseben znak
+          </S.CheckItem>
+        </S.Checklist>
 
         <S.SignIn onClick={handleSubmit}>Registracija</S.SignIn>
         <S.Subtitle>

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import * as S from "./styles";
 import Logo from "../../Img/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ const Login: React.FC = () => {
   const { setUserData } = useContext(AuthContext) as AuthType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function handleLogin() {
     axios
@@ -20,8 +21,9 @@ const Login: React.FC = () => {
         if (response.data.status === "success") {
           localStorage.setItem("@Project:email", email);
           setUserData({ email });
+          redirect("/");
         } else {
-          console.log("Error:", response.data.message);
+          setError(response.data.message);
         }
       })
       .catch(function (error) {
@@ -50,6 +52,7 @@ const Login: React.FC = () => {
           id="email"
           onChange={handleEmail}
           placeholder="npr. janez.novak@gmail.com"
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         ></S.InputField>
         <S.FieldName>Geslo</S.FieldName>
         <S.InputField
@@ -57,14 +60,10 @@ const Login: React.FC = () => {
           placeholder="Vnesite geslo"
           type="password"
           onChange={handlePassword}
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         ></S.InputField>
-        {/*<S.KeepSigned>
-          <S.Checkbox />
-          <S.Subtitle>Remember me</S.Subtitle>
-        </S.KeepSigned>*/}
-        <Link to="/">
-          <S.SignIn onClick={handleLogin}>Prijava</S.SignIn>
-        </Link>
+        <S.ErrorMessage>{error}</S.ErrorMessage>
+        <S.SignIn onClick={handleLogin}>Prijava</S.SignIn>
         <S.Subtitle>
           Še nimate računa? <Link to="/register">Registracija</Link>
         </S.Subtitle>

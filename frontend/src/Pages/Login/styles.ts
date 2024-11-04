@@ -123,3 +123,9 @@ export const InputField = styled.input`
         align-items:center;
         margin-top:16px
     `
+    export const ErrorMessage = styled.div`
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: left;
+`;

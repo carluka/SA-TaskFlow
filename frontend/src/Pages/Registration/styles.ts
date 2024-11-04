@@ -123,3 +123,26 @@ export const InputField = styled.input`
         align-items:center;
         margin-top:16px
     `
+    
+export const ErrorMessage = styled.div`
+color: red;
+font-size: 0.875rem;
+margin-top: 0.25rem;
+`;
+
+export const Checklist = styled.ul`
+list-style: none;
+padding: 0;
+margin-top: 0.5rem;
+`;
+
+export const CheckItem = styled.li`
+display: flex;
+align-items: center;
+font-size: 0.875rem;
+color: #333;
+margin-top: 0.25rem;
+svg {
+  margin-right: 0.5rem;
+}
+`;
