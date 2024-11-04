@@ -40,4 +40,14 @@ class TaskController
             echo json_encode(['status' => 'error', 'message' => 'Napaka']);
         }
     }
+    public function editTask($input)
+    {
+        $taskModel = new TaskModel();
+        $id = $taskModel->editTask($input);
+        if ($id) {
+            echo json_encode(['status' => 'success', 'message' => 'Uspešno posodobljeno opravilo']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Napaka']);
+        }
+    }
 }

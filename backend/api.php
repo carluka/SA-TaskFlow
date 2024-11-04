@@ -99,6 +99,16 @@ switch ($endpoint) {
             echo json_encode(['message' => 'Invalid request method']);
         }
         break;
+
+    case 'editTask':
+        if ($request_method === 'PUT') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $taskController = new TaskController();
+            $taskController->editTask($input);
+        } else {
+            echo json_encode(['message' => 'Invalid request method']);
+        }
+        break;
     default:
         echo json_encode(['message' => 'Invalid endpoint']);
         break;

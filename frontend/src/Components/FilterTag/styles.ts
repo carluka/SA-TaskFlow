@@ -5,7 +5,7 @@ interface activeProps{
 }
 
 export const Container = styled.div<activeProps>`
-    width: 80px;
+    width: 120px;
     height: 24px;
     border-radius:8px;
     border: 1px solid #ccc;

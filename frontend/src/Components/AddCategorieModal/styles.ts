@@ -14,7 +14,7 @@ export const Background = styled.div`
 
 export const Container=styled.div`
     width: 40vw;
-    height: 40vh;
+    height: 20vh;
     background: white;
     border-radius:16px;
     opacity: 1;

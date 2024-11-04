@@ -81,7 +81,11 @@ const Home: React.FC = () => {
         params: { email: userData.email },
       })
       .then(function (response) {
-        setCategList(response.data);
+        const updatedList = [
+          { id: -1, naziv: "Brez Kategorije" },
+          ...response.data,
+        ];
+        setCategList(updatedList);
       })
       .catch(function (error) {
         console.error("There was an error!", error);

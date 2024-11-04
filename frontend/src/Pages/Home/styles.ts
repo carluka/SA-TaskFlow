@@ -65,7 +65,7 @@ export const Title = styled.h3`
 export const FilterField = styled.div`
     height: 20px;
     display: flex;
-    justify-content:center;;
+    justify-content:center;
 `
 
 export const FilterIcon = styled.img`

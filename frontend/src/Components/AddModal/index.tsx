@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as S from "./styles";
 import { AddContext } from "../../Contexts/addContext";
 import { AddType } from "../../Contexts/addType";
@@ -10,84 +10,89 @@ import axios from "axios";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 
 const AddModal: React.FC = () => {
-  const { addTask } = useContext(TaskListContext) as TaskListType;
+  const { addTask, editTask } = useContext(TaskListContext) as TaskListType;
   const { categList } = useContext(CategoriesContext) as CategorieContextType;
   const { setShowAdd } = useContext(AddContext) as AddType;
   const { userData } = useContext(AuthContext) as AuthType;
+  const { task, setTask } = useContext(AddContext) as AddType;
 
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [taskPriority, setTaskPriority] = useState("");
-  const [taskDeadline, setTaskDeadline] = useState("");
-  const [taskUser, setTaskUser] = useState("");
+  const [taskDeadline, setTaskDeadline] = useState("0000-00-00 00:00:00");
+  const [taskUser, setTaskUser] = useState(userData.email);
   const [taskDone, setTaskDone] = useState(false);
-  const [taskCat, setTaskCat] = useState(
-    categList.findIndex((cat) => cat.naziv === "None")
-  );
+  const [taskCat, setTaskCat] = useState<number>(-1);
 
-  function handleTyping(event: React.ChangeEvent<HTMLInputElement>) {
-    setTaskName(event.target.value);
-  }
+  useEffect(() => {
+    if (task) {
+      setTaskName(task.naziv);
+      setTaskDescription(task.opis);
+      setTaskDeadline(task.rok.split(" ")[0]);
+      setTaskUser(task.uporabnik || userData.email);
+      setTaskDone(task.opravljeno);
+      setTaskCat(task.kategorija ?? -1);
+    } else {
+      resetForm();
+    }
+  }, [task, userData.email, categList]);
 
-  function handleDescription(event: React.ChangeEvent<HTMLInputElement>) {
-    setTaskDescription(event.target.value);
-  }
+  const resetForm = () => {
+    setTaskName("");
+    setTaskDescription("");
+    setTaskDeadline("0000-00-00 00:00:00");
+    setTaskUser(userData.email);
+    setTaskDone(false);
+    setTaskCat(-1);
+  };
 
-  function handlePriority(event: React.ChangeEvent<HTMLSelectElement>) {
-    setTaskPriority(event.target.value);
-  }
+  const handleFormChange =
+    (
+      setter: React.Dispatch<React.SetStateAction<any>>,
+      isNumber: boolean = false
+    ) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const value = isNumber
+        ? parseInt(event.target.value)
+        : event.target.value;
+      setter(value);
+    };
 
-  function handleDeadline(event: React.ChangeEvent<HTMLInputElement>) {
-    setTaskDeadline(event.target.value);
-  }
-
-  function handleUser(event: React.ChangeEvent<HTMLInputElement>) {
-    setTaskUser(event.target.value);
-  }
-
-  function handleDone(event: React.ChangeEvent<HTMLInputElement>) {
-    setTaskDone(event.target.checked);
-  }
-
-  function handleCancel() {
-    setShowAdd(false);
-  }
-
-  function handleAdd() {
-    console.log(taskCat);
+  const handleSubmit = async () => {
     const newTask: TaskProps = {
-      id: Math.random(),
+      id: task ? task.id : Math.random(),
       naziv: taskName,
       opis: taskDescription,
-      prioriteta: taskPriority,
       rok: taskDeadline,
       kategorija: taskCat,
-      opravljeno: false,
-      uporabnik: userData.email,
+      opravljeno: taskDone,
+      uporabnik: taskUser,
     };
-    axios
-      .post("http://localhost:8000/api.php?action=addTask", newTask)
-      .then(function (response) {
-        if (response.data.status == "success") {
-          const taskWithId: TaskProps = {
-            ...newTask,
-            id: response.data.id,
-          };
-          addTask(taskWithId);
+    console.log(taskDeadline);
+
+    try {
+      if (task) {
+        await axios.put(
+          "http://localhost:8000/api.php?action=editTask",
+          newTask
+        );
+        editTask(newTask);
+      } else {
+        const response = await axios.post(
+          "http://localhost:8000/api.php?action=addTask",
+          newTask
+        );
+        if (response.data.status === "success") {
+          addTask({ ...newTask, id: response.data.id });
         }
-      })
-      .catch(function (error) {
-        console.error("There was an error!", error);
-      });
-    setShowAdd(false);
-  }
-
-  var e = document.getElementById("select") as HTMLSelectElement;
-
-  function handleChange() {
-    console.log(e.options[e.selectedIndex].value);
-    setTaskCat(Number(e.options[e.selectedIndex].value));
-  }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setShowAdd(false);
+      setTask(null);
+      resetForm();
+    }
+  };
 
   return (
     <S.Background>
@@ -95,34 +100,26 @@ const AddModal: React.FC = () => {
         <S.Text>Vnesite naziv</S.Text>
         <S.TitleInput
           placeholder="Naziv opravila"
-          onChange={handleTyping}
+          onChange={handleFormChange(setTaskName)}
           value={taskName}
         />
 
         <S.Text>Opis opravila</S.Text>
         <S.TitleInput
           placeholder="Opis opravila"
-          onChange={handleDescription}
+          onChange={handleFormChange(setTaskDescription)}
           value={taskDescription}
         />
 
-        <S.Text>Prioriteta</S.Text>
-        <S.Select onChange={handlePriority} value={taskPriority}>
-          <option value={"Nizka"}>Nizka</option>
-          <option value={"Srednja"}>Srednja</option>
-          <option value={"Visoka"}>Visoka</option>
-        </S.Select>
-
         <S.Text>Rok</S.Text>
         <S.TitleInput
-          placeholder="Nastavi rok"
           type="date"
-          onChange={handleDeadline}
+          onChange={handleFormChange(setTaskDeadline)}
           value={taskDeadline}
         />
 
         <S.Text>Izberite kategorijo</S.Text>
-        <S.Select id="select" onChange={handleChange}>
+        <S.Select onChange={handleFormChange(setTaskCat, true)} value={taskCat}>
           {categList.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.naziv}
@@ -131,8 +128,17 @@ const AddModal: React.FC = () => {
         </S.Select>
 
         <S.Buttons>
-          <S.CancelButton onClick={handleCancel}>Prekliči</S.CancelButton>
-          <S.DeletButton onClick={handleAdd}>Dodaj</S.DeletButton>
+          <S.CancelButton
+            onClick={() => {
+              setShowAdd(false);
+              setTask(null);
+            }}
+          >
+            Prekliči
+          </S.CancelButton>
+          <S.DeletButton onClick={handleSubmit}>
+            {task ? "Posodobi" : "Dodaj"}
+          </S.DeletButton>
         </S.Buttons>
       </S.Container>
     </S.Background>

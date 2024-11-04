@@ -49,12 +49,11 @@ class TaskModel
 
             if ($user) {
 
-                $insertQuery = "INSERT INTO opravilo (naziv, opis, prioriteta, rok, uporabnik, kategorija, opravljeno) VALUES (:naziv, :opis, :prioriteta, :rok, :uporabnik, :kategorija, :opravljeno)";
+                $insertQuery = "INSERT INTO opravilo (naziv, opis, rok, uporabnik, kategorija, opravljeno) VALUES (:naziv, :opis, :rok, :uporabnik, :kategorija, :opravljeno)";
                 $stmt = $this->db->prepare($insertQuery);
                 $result = $stmt->execute([
                     'naziv' => $input['naziv'],
                     'opis' => $input['opis'],
-                    'prioriteta' => $input['prioriteta'],
                     'rok' => $input['rok'],
                     'uporabnik' => $user['id'],
                     'kategorija' => $input['kategorija'],
@@ -97,6 +96,46 @@ class TaskModel
             $stmt->execute(['id' => $id]);
             if ($stmt->rowCount() > 0) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+    public function editTask($input)
+    {
+        try {
+            $query = "SELECT id FROM uporabnik WHERE email = :email";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(['email' => $input['uporabnik']]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                $updateQuery = "UPDATE opravilo SET 
+                naziv = :naziv, 
+                opis = :opis, 
+                rok = :rok, 
+                uporabnik = :uporabnik, 
+                kategorija = :kategorija, 
+                opravljeno = :opravljeno 
+                WHERE id = :id";
+
+                $stmt = $this->db->prepare($updateQuery);
+                $result = $stmt->execute([
+                    'naziv' => $input['naziv'],
+                    'opis' => $input['opis'],
+                    'rok' => $input['rok'],
+                    'uporabnik' => $user['id'],
+                    'kategorija' => $input['kategorija'],
+                    'opravljeno' => $input['opravljeno'],
+                    'id' => $input['id']
+                ]);
+
+                if ($result) {
+                    return true;
+                }
             } else {
                 return false;
             }

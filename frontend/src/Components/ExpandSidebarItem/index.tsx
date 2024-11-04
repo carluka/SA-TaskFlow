@@ -32,10 +32,6 @@ const ExpandSidebarItem: React.FC<SidebarItemProps> = ({ name, icon }) => {
           <CategorieItem key={cat.id} name={cat.naziv} />
         ))}
         <AddCategorie></AddCategorie>
-        {/*<S.AddArea>
-          <S.AddIcon src={Add} />
-          <S.AddText>Dodaj</S.AddText>
-        </S.AddArea>*/}
       </S.CatArea>
     </S.OuterContainer>
   );

@@ -29,9 +29,19 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
   };
 
   const addTask = (task: TaskProps) => {
-    taskList.push(task);
-    setTaskList([...taskList]);
+    setTaskList([task, ...taskList]);
     setNotDoneTasks([...notDoneTasks, task]);
+  };
+
+  const editTask = (updatedTask: TaskProps) => {
+    const updatedTaskList = taskList.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    setTaskList(updatedTaskList);
+    setDoneTasks(updatedTaskList.filter((task) => task.opravljeno === true));
+    setNotDoneTasks(
+      updatedTaskList.filter((task) => task.opravljeno === false)
+    );
   };
 
   const checkTask = (id: number) => {
@@ -76,6 +86,7 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
         checkTask,
         deleteTask,
         clearAllTasks,
+        editTask,
       }}
     >
       {children}

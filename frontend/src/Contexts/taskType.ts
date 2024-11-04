@@ -1,12 +1,11 @@
 export interface TaskProps{
     id: number;
     naziv: string;
-    prioriteta: string;
-     opis: string;
-     rok: string;
-     kategorija: number;
-     opravljeno: boolean;
-     uporabnik: string;
+    opis: string;
+    rok: string;
+    kategorija: number;
+    opravljeno: boolean;
+    uporabnik: string;
 };
   
 
@@ -19,4 +18,5 @@ export type TaskListType = {
     checkTask: (id:number) =>void;
     deleteTask: (id:number)=>void;
     clearAllTasks: ()=>void;
+    editTask: (task: TaskProps)=>void;
 }
