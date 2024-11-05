@@ -6,7 +6,7 @@ import ContextProviders from "./contextProviders";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
-import CategoriePage from "./Pages/Categorie";
+import CategoriePage from "./Pages/Category";
 import ProtectedRoute from "./Routes/Route";
 import Registration from "./Pages/Registration";
 
@@ -40,7 +40,7 @@ function App() {
             }
           />
           <Route
-            path="/categorie/:name"
+            path="/category/:name"
             element={
               <ProtectedRoute priv={true}>
                 <CategoriePage />

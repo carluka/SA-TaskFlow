@@ -2,43 +2,43 @@ import React, { useContext, useState } from "react";
 import * as S from "./styles";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 import {
-  CategorieContextType,
-  CategorieProps,
+  CategoryContextType,
+  CategoryProps,
 } from "../../Contexts/categoriesType";
 import axios from "axios";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
-import { AddCategorieType } from "../../Contexts/addCategorieType";
-import { AddCategorieContext } from "../../Contexts/addCategorieContext";
+import { AddCategoryType } from "../../Contexts/addCategoryType";
+import { AddCategoryContext } from "../../Contexts/addCategoryContext";
 
-const AddCategorieModal: React.FC = () => {
+const AddCategoryModal: React.FC = () => {
   const { userData } = useContext(AuthContext) as AuthType;
-  const { setShowAddCategorie } = useContext(
-    AddCategorieContext
-  ) as AddCategorieType;
+  const { setShowAddCategory } = useContext(
+    AddCategoryContext
+  ) as AddCategoryType;
 
-  const [categorieName, setCategorieName] = useState("");
-  const { addCat } = useContext(CategoriesContext) as CategorieContextType;
+  const [categoryName, setCategoryName] = useState("");
+  const { addCat } = useContext(CategoriesContext) as CategoryContextType;
   var e = document.getElementById("select") as HTMLSelectElement;
 
   function handleTyping(event: React.ChangeEvent<HTMLInputElement>) {
-    setCategorieName(event.target.value);
+    setCategoryName(event.target.value);
   }
 
   function handleCancel() {
-    setShowAddCategorie(false);
+    setShowAddCategory(false);
   }
 
   function handleAdd() {
-    const newCat: CategorieProps = {
+    const newCat: CategoryProps = {
       id: Math.random(),
-      naziv: categorieName,
+      naziv: categoryName,
       uporabnik: userData.email,
     };
     axios
       .post("http://localhost:8000/api.php?action=addCategory", newCat)
       .then(function (response) {
         if (response.data.status == "success") {
-          const catWithId: CategorieProps = {
+          const catWithId: CategoryProps = {
             ...newCat,
             id: response.data.id,
           };
@@ -48,7 +48,7 @@ const AddCategorieModal: React.FC = () => {
       .catch(function (error) {
         console.error("There was an error!", error);
       });
-    setShowAddCategorie(false);
+    setShowAddCategory(false);
   }
 
   return (
@@ -58,7 +58,7 @@ const AddCategorieModal: React.FC = () => {
         <S.TitleInput
           placeholder="Naziv kategorije"
           onChange={handleTyping}
-          value={categorieName}
+          value={categoryName}
         />
         <S.Buttons>
           <S.CancelButton onClick={handleCancel}>Prekliči</S.CancelButton>
@@ -69,4 +69,4 @@ const AddCategorieModal: React.FC = () => {
   );
 };
 
-export default AddCategorieModal;
+export default AddCategoryModal;

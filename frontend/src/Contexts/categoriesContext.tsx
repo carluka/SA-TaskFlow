@@ -1,20 +1,20 @@
 import React, { createContext, useState, ReactNode } from "react";
-import { CategorieProps, CategorieContextType } from "./categoriesType";
+import { CategoryProps, CategoryContextType } from "./categoriesType";
 
 interface ChildrenProps {
   children: React.ReactNode;
 }
 
-export const CategoriesContext = createContext<CategorieContextType | null>(
+export const CategoriesContext = createContext<CategoryContextType | null>(
   null
 );
 
 export const CategoriesContextProvider: React.FC<ChildrenProps> = ({
   children,
 }) => {
-  const [categList, setCategList] = useState<CategorieProps[]>([]);
+  const [categList, setCategList] = useState<CategoryProps[]>([]);
 
-  const addCat = (cat: CategorieProps) => {
+  const addCat = (cat: CategoryProps) => {
     categList.push(cat);
     setCategList([...categList]);
   };

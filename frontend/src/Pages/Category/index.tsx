@@ -24,7 +24,7 @@ import { AddContext } from "../../Contexts/addContext";
 import { AddType } from "../../Contexts/addType";
 import { Link } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
-import { CategorieContextType } from "../../Contexts/categoriesType";
+import { CategoryContextType } from "../../Contexts/categoriesType";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 
 const CategoriePage: React.FC = () => {
@@ -34,7 +34,7 @@ const CategoriePage: React.FC = () => {
     TaskListContext
   ) as TaskListType;
   const { showDelete } = useContext(DeleteContext) as DeleteType;
-  const { categList } = useContext(CategoriesContext) as CategorieContextType;
+  const { categList } = useContext(CategoriesContext) as CategoryContextType;
   const { showAdd } = useContext(AddContext) as AddType;
   const [listToDisplay, setListToDisplay] = useState(0);
   const id = categList.find((cat) => cat.naziv == name)?.id;

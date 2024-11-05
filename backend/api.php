@@ -3,7 +3,7 @@ require_once __DIR__ . '/services/Database.php';
 require_once __DIR__ . '/controllers/LoginController.php';
 require_once __DIR__ . '/controllers/RegistrationController.php';
 require_once __DIR__ . '/controllers/TaskController.php';
-require_once __DIR__ . '/controllers/CategorieController.php';
+require_once __DIR__ . '/controllers/CategoryController.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -84,8 +84,8 @@ switch ($endpoint) {
     case 'getCategories':
         if ($request_method === 'GET') {
             $email = $_GET['email'];
-            $categorieController = new CategorieController();
-            $categorieController->getCategories($email);
+            $categoryController = new CategoryController();
+            $categoryController->getCategories($email);
         } else {
             echo json_encode(['message' => 'Invalid request method']);
         }
@@ -93,8 +93,8 @@ switch ($endpoint) {
     case 'addCategory':
         if ($request_method === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
-            $categorieController = new CategorieController();
-            $categorieController->addCategory($input);
+            $categoryController = new CategoryController();
+            $categoryController->addCategory($input);
         } else {
             echo json_encode(['message' => 'Invalid request method']);
         }

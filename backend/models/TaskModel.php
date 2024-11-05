@@ -21,7 +21,7 @@ class TaskModel
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
-                $query = "SELECT * FROM opravilo WHERE uporabnik = :uporabnik";
+                $query = "SELECT * FROM opravilo WHERE uporabnik = :uporabnik ORDER BY datum_nastanka DESC";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(['uporabnik' => $user['id']]);
 
@@ -49,7 +49,7 @@ class TaskModel
 
             if ($user) {
 
-                $insertQuery = "INSERT INTO opravilo (naziv, opis, rok, uporabnik, kategorija, opravljeno) VALUES (:naziv, :opis, :rok, :uporabnik, :kategorija, :opravljeno)";
+                $insertQuery = "INSERT INTO opravilo (naziv, opis, rok, uporabnik, kategorija, opravljeno, datum_nastanka) VALUES (:naziv, :opis, :rok, :uporabnik, :kategorija, :opravljeno, NOW())";
                 $stmt = $this->db->prepare($insertQuery);
                 $result = $stmt->execute([
                     'naziv' => $input['naziv'],

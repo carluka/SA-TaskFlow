@@ -3,16 +3,16 @@ import * as S from "./styles";
 import Add from "../../Img/add.svg";
 import { AddType } from "../../Contexts/addType";
 import { AddContext } from "../../Contexts/addContext";
-import { AddCategorieType } from "../../Contexts/addCategorieType";
-import { AddCategorieContext } from "../../Contexts/addCategorieContext";
+import { AddCategoryType } from "../../Contexts/addCategoryType";
+import { AddCategoryContext } from "../../Contexts/addCategoryContext";
 
-const AddCategorie: React.FC = () => {
-  const { setShowAddCategorie } = useContext(
-    AddCategorieContext
-  ) as AddCategorieType;
+const AddCategory: React.FC = () => {
+  const { setShowAddCategory } = useContext(
+    AddCategoryContext
+  ) as AddCategoryType;
 
   function handleClick() {
-    setShowAddCategorie(true);
+    setShowAddCategory(true);
   }
 
   return (
@@ -23,4 +23,4 @@ const AddCategorie: React.FC = () => {
   );
 };
 
-export default AddCategorie;
+export default AddCategory;

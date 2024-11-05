@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../services/Database.php';
 
-class CategorieModel
+class CategoryModel
 {
     private $db;
 

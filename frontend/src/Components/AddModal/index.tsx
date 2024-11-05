@@ -5,13 +5,13 @@ import { AddType } from "../../Contexts/addType";
 import { TaskListContext } from "../../Contexts/taskListContext";
 import { TaskProps, TaskListType } from "../../Contexts/taskType";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
-import { CategorieContextType } from "../../Contexts/categoriesType";
+import { CategoryContextType } from "../../Contexts/categoriesType";
 import axios from "axios";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 
 const AddModal: React.FC = () => {
   const { addTask, editTask } = useContext(TaskListContext) as TaskListType;
-  const { categList } = useContext(CategoriesContext) as CategorieContextType;
+  const { categList } = useContext(CategoriesContext) as CategoryContextType;
   const { setShowAdd } = useContext(AddContext) as AddType;
   const { userData } = useContext(AuthContext) as AuthType;
   const { task, setTask } = useContext(AddContext) as AddType;

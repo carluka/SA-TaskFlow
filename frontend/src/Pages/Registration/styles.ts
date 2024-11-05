@@ -91,23 +91,20 @@ export const InputField = styled.input`
 
     `
 
-    export const SignIn = styled.button`
-        width: 25vw;
-        height: 40px;
-        border-radius: 8px;
-        background: #7f56da;
-        color: white;
-        font-size:16px;
-        border: 0px;
-        font-weight:400;
-
-        margin: 16px 0px;
-
-        &:hover{
-            background: #613db7;
-            cursor:pointer;
-        }
-        
+export const SignIn = styled.button`
+    width: 25vw;
+    height: 40px;
+    border-radius: 8px;
+    background: #7f56da;
+    color: white;
+    font-size:16px;
+    border: 0px;
+    font-weight:400;
+    margin: 16px 0px;
+    &:hover{
+        background: #613db7;
+        cursor:pointer;
+    }
     `
 
     export const Checkbox = styled.input.attrs({type:'checkbox'})`

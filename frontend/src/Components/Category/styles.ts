@@ -25,3 +25,7 @@ export const ListName = styled.p`
     margin-left:8px;
     font-weight:400; 
 `
+export const Icon = styled.img`
+    margin-left:5px;
+    height:10px;
+`

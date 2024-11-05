@@ -1,11 +1,11 @@
-export interface CategorieProps{
+export interface CategoryProps{
     id:number;
     naziv:string;
     uporabnik: string;
 };
 
-export type CategorieContextType = {
-    categList: CategorieProps[];
+export type CategoryContextType = {
+    categList: CategoryProps[];
     setCategList: Function;
     addCat: Function;
 }

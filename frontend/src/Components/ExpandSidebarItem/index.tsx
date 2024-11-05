@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import * as S from "./styles";
 import Arrow from "../../Img/arrow.svg";
-import CategorieItem from "../Categorie";
+import CategoryItem from "../Category";
 import Add from "../../Img/add.svg";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
-import { CategorieContextType } from "../../Contexts/categoriesType";
-import AddCategorie from "../AddCategorie";
+import { CategoryContextType } from "../../Contexts/categoriesType";
+import AddCategory from "../AddCategory";
 
 interface SidebarItemProps {
   name: string;
@@ -14,7 +14,7 @@ interface SidebarItemProps {
 
 const ExpandSidebarItem: React.FC<SidebarItemProps> = ({ name, icon }) => {
   const [active, setActive] = useState(false);
-  const { categList } = useContext(CategoriesContext) as CategorieContextType;
+  const { categList } = useContext(CategoriesContext) as CategoryContextType;
 
   function handleActivate() {
     setActive(!active);
@@ -29,9 +29,9 @@ const ExpandSidebarItem: React.FC<SidebarItemProps> = ({ name, icon }) => {
       </S.Container>
       <S.CatArea isActive={active}>
         {categList.map((cat) => (
-          <CategorieItem key={cat.id} name={cat.naziv} />
+          <CategoryItem key={cat.id} name={cat.naziv} />
         ))}
-        <AddCategorie></AddCategorie>
+        <AddCategory></AddCategory>
       </S.CatArea>
     </S.OuterContainer>
   );

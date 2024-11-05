@@ -42,7 +42,7 @@ export const Main = styled.div`
 
 export const Header = styled.h1`
     font-size: 40px;
-    font-weight:400;
+    font-weight:800;
     color: #555;
     margin: 16px;
 `
