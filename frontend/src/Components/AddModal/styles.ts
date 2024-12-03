@@ -116,8 +116,16 @@ export const Text = styled.p`
 font-size:20px;
 color:#555;
 `
+export const ErrorMessage = styled.div`
+color: red;
+font-size: 0.875rem;
+margin-top: 0.25rem;
+`;
 
-
-
+export const Counter = styled.div`
+  font-size: 0.875rem;
+  color: #555;
+  margin-top: 4px;
+`;
 
 

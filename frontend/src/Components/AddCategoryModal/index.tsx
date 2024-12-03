@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as S from "./styles";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 import {
@@ -9,8 +9,14 @@ import axios from "axios";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import { AddCategoryType } from "../../Contexts/addCategoryType";
 import { AddCategoryContext } from "../../Contexts/addCategoryContext";
+import { useParams } from "react-router-dom";
 
-const AddCategoryModal: React.FC = () => {
+interface AddCategoryProps {
+  id: number | undefined;
+}
+
+const AddCategoryModal: React.FC<AddCategoryProps> = ({ id }) => {
+  const { name } = useParams<string>();
   const { userData } = useContext(AuthContext) as AuthType;
   const { setShowAddCategory } = useContext(
     AddCategoryContext
@@ -19,6 +25,13 @@ const AddCategoryModal: React.FC = () => {
   const [categoryName, setCategoryName] = useState("");
   const { addCat } = useContext(CategoriesContext) as CategoryContextType;
   var e = document.getElementById("select") as HTMLSelectElement;
+  const [nameError, setNameError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (name !== undefined) {
+      setCategoryName(name);
+    }
+  }, [name]);
 
   function handleTyping(event: React.ChangeEvent<HTMLInputElement>) {
     setCategoryName(event.target.value);
@@ -26,29 +39,52 @@ const AddCategoryModal: React.FC = () => {
 
   function handleCancel() {
     setShowAddCategory(false);
+    setNameError(null);
   }
 
-  function handleAdd() {
-    const newCat: CategoryProps = {
-      id: Math.random(),
-      naziv: categoryName,
-      uporabnik: userData.email,
-    };
-    axios
-      .post("http://localhost:8000/api.php?action=addCategory", newCat)
-      .then(function (response) {
-        if (response.data.status == "success") {
-          const catWithId: CategoryProps = {
-            ...newCat,
-            id: response.data.id,
-          };
-          addCat(catWithId);
-        }
-      })
-      .catch(function (error) {
-        console.error("There was an error!", error);
-      });
+  function handleEdit() {
     setShowAddCategory(false);
+    setNameError(null);
+  }
+  function handleDelete() {
+    id = undefined;
+    setShowAddCategory(false);
+    setNameError(null);
+  }
+
+  async function handleAdd() {
+    if (categoryName) {
+      const newCat: CategoryProps = {
+        id: id ? id : Math.random(),
+        naziv: categoryName,
+        uporabnik: userData.email,
+      };
+      try {
+        if (name) {
+          await axios.put(
+            "http://localhost:8000/api.php?action=editCategory",
+            newCat
+          );
+        } else {
+          const response = await axios.post(
+            "http://localhost:8000/api.php?action=addCategory",
+            newCat
+          );
+          if (response.data.status === "success") {
+            addCat({ ...newCat, id: response.data.id });
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setShowAddCategory(false);
+        id = undefined;
+        setNameError(null);
+        //name = null;
+      }
+    } else {
+      setNameError("Naziv ne sme biti prazen.");
+    }
   }
 
   return (
@@ -59,11 +95,21 @@ const AddCategoryModal: React.FC = () => {
           placeholder="Naziv kategorije"
           onChange={handleTyping}
           value={categoryName}
+          maxLength={22}
         />
-        <S.Buttons>
-          <S.CancelButton onClick={handleCancel}>Prekliči</S.CancelButton>
-          <S.DeletButton onClick={handleAdd}>Dodaj</S.DeletButton>
-        </S.Buttons>
+        <S.ErrorMessage>{nameError}</S.ErrorMessage>
+        {name ? (
+          <S.Buttons>
+            <S.CancelButton onClick={handleCancel}>Prekliči</S.CancelButton>
+            <S.EditButton onClick={handleEdit}>Posodobi</S.EditButton>
+            <S.DeleteButton onClick={handleDelete}>Odstrani</S.DeleteButton>
+          </S.Buttons>
+        ) : (
+          <S.Buttons>
+            <S.CancelButton onClick={handleCancel}>Prekliči</S.CancelButton>
+            <S.DeleteButton onClick={handleAdd}>Dodaj</S.DeleteButton>
+          </S.Buttons>
+        )}
       </S.Container>
     </S.Background>
   );

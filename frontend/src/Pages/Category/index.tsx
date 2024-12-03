@@ -26,6 +26,10 @@ import { Link } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import { CategoryContextType } from "../../Contexts/categoriesType";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
+import Edit from "../../Img/edit.svg";
+import AddCategoryModal from "../../Components/AddCategoryModal";
+import { AddCategoryContext } from "../../Contexts/addCategoryContext";
+import { AddCategoryType } from "../../Contexts/addCategoryType";
 
 const CategoriePage: React.FC = () => {
   const { name } = useParams<string>();
@@ -48,7 +52,10 @@ const CategoriePage: React.FC = () => {
   const [notDoneActive, setNotDoneActive] = useState(false);
 
   const { setUserData } = useContext(AuthContext) as AuthType;
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const { showAddCategory, setShowAddCategory } = useContext(
+    AddCategoryContext
+  ) as AddCategoryType;
+
   function handleAll() {
     setListToDisplay(0);
     setAllActive(true);
@@ -73,6 +80,11 @@ const CategoriePage: React.FC = () => {
     localStorage.removeItem("@Project:email");
     setUserData({ email: "" });
   }
+
+  function handleEdit() {
+    setShowAddCategory(true);
+  }
+
   return (
     <S.Page>
       <S.Sidebar>
@@ -108,7 +120,10 @@ const CategoriePage: React.FC = () => {
         </Link>
       </S.Sidebar>
       <S.Main>
-        <S.Header>{name}</S.Header>
+        <S.Header>
+          {name} <S.Icon src={Edit} onClick={handleEdit} />
+        </S.Header>
+
         <S.TitleAndFilter>
           <S.Title onClick={handleDone}>Opravila </S.Title>
           <S.FilterField>
@@ -139,6 +154,7 @@ const CategoriePage: React.FC = () => {
       </S.Main>
       {showDelete && <DeleteModal />}
       {showAdd && <AddModal />}
+      {showAddCategory && <AddCategoryModal id={id} />}
     </S.Page>
   );
 };

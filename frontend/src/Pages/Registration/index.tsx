@@ -107,9 +107,11 @@ const Register: React.FC = () => {
           }
         )
         .then((response) => {
+          console.log(response);
           if (response.data.status === "success") {
             localStorage.setItem("@Project:email", email);
             setUserData({ email });
+            console.log("redirect");
             redirect("/");
           } else {
             setServerError(response.data.message);

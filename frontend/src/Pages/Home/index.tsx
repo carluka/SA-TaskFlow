@@ -185,7 +185,7 @@ const Home: React.FC = () => {
       </S.Main>
       {showDelete && <DeleteModal />}
       {showAdd && <AddModal />}
-      {showAddCategory && <AddCategoryModal />}
+      {showAddCategory && <AddCategoryModal id={undefined} />}
     </S.Page>
   );
 };

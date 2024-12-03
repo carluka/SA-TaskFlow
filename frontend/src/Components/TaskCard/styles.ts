@@ -44,7 +44,7 @@ export const Name = styled.h2<DoneProps>`
   color: #444;
   font-weight: 500;
   margin: 0;
-  width: 200px; /* Fixed width for task title */
+  width: 290px; /* Fixed width for task title */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

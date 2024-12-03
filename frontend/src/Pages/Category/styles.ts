@@ -72,3 +72,10 @@ export const FilterIcon = styled.img`
     height: 20px;
     margin: 0 8px;
 `
+export const Icon = styled.img`
+    width: 15px;
+    margin: 16px 0px;
+    &:hover{
+            cursor:pointer;
+        }
+`

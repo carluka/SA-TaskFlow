@@ -50,7 +50,7 @@ margin: 8px;
 }
 `
 
-export const DeletButton = styled.button`
+export const EditButton = styled.button`
 background: white;
 border: 1px solid green;
 color:green;
@@ -62,6 +62,22 @@ margin: 8px;
 
 &:hover{
     border:2px solid green;
+    font-weight:500;
+    background: #eee;
+}
+`
+export const DeleteButton = styled.button`
+background: white;
+border: 1px solid red;
+color:red;
+width: 120px;
+height: 40px;
+border-radius: 8px;
+font-size: 20px;
+margin: 8px;
+
+&:hover{
+    border:2px solid red;
     font-weight:500;
     background: #eee;
 }
@@ -118,6 +134,10 @@ color:#555;
 `
 
 
-
+export const ErrorMessage = styled.div`
+color: red;
+font-size: 0.875rem;
+margin-top: 0.25rem;
+`;
 
 
