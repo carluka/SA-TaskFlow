@@ -48,7 +48,7 @@ class TaskModel
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
-
+                $isDone = !empty($input['opravljeno']) ? 1 : 0;
                 $insertQuery = "INSERT INTO opravilo (naziv, opis, rok, uporabnik, kategorija, opravljeno, datum_nastanka) VALUES (:naziv, :opis, :rok, :uporabnik, :kategorija, :opravljeno, NOW())";
                 $stmt = $this->db->prepare($insertQuery);
                 $result = $stmt->execute([
@@ -57,7 +57,7 @@ class TaskModel
                     'rok' => $input['rok'],
                     'uporabnik' => $user['id'],
                     'kategorija' => $input['kategorija'],
-                    'opravljeno' => $input['opravljeno'],
+                    'opravljeno' => $isDone,
                 ]);
                 if ($result) {
                     return $this->db->lastInsertId();
@@ -107,6 +107,7 @@ class TaskModel
     public function editTask($input)
     {
         try {
+            $isDone = !empty($input['opravljeno']) ? 1 : 0;
             $query = "SELECT id FROM uporabnik WHERE email = :email";
             $stmt = $this->db->prepare($query);
             $stmt->execute(['email' => $input['uporabnik']]);
@@ -129,7 +130,7 @@ class TaskModel
                     'rok' => $input['rok'],
                     'uporabnik' => $user['id'],
                     'kategorija' => $input['kategorija'],
-                    'opravljeno' => $input['opravljeno'],
+                    'opravljeno' => $isDone,
                     'id' => $input['id']
                 ]);
 
