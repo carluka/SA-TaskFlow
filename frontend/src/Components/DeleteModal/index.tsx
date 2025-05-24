@@ -17,7 +17,7 @@ const DeleteModal: React.FC = () => {
 
   function handleConfirm() {
     axios
-      .delete("http://api:8000/api.php?action=deleteTask", {
+      .delete("http://74.234.179.253:8000/api.php?action=deleteTask", {
         data: { id: id },
       })
       //.then(function (response) {})

@@ -57,7 +57,7 @@ const Home: React.FC = () => {
 
   function fetchTask() {
     axios
-      .get("http://api:8000/api.php", {
+      .get("http://74.234.179.253:8000/api.php", {
         params: {
           action: "getTask",
           email: userData.email,
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
 
   function fetchCategory() {
     axios
-      .get("http://api:8000/api.php?action=getCategories", {
+      .get("http://74.234.179.253:8000/api.php?action=getCategories", {
         params: { email: userData.email },
       })
       .then(function (response) {

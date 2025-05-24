@@ -56,12 +56,12 @@ const AddCategoryModal: React.FC<AddCategoryProps> = ({ id }) => {
       try {
         if (name) {
           await axios.put(
-            "http://api:8000/api.php?action=editCategory",
+            "http://74.234.179.253:8000/api.php?action=editCategory",
             newCat
           );
         } else {
           const response = await axios.post(
-            "http://api:8000/api.php?action=addCategory",
+            "http://74.234.179.253:8000/api.php?action=addCategory",
             newCat
           );
           if (response.data.status === "success") {
