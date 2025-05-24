@@ -93,7 +93,7 @@ const Register: React.FC = () => {
     if (!imeError && !priimekError && !emailError && !passwordError) {
       axios
         .post(
-          "http://localhost:8000/api.php?action=register",
+          "http://api:8000/api.php?action=register",
           {
             ime: ime,
             priimek: priimek,

@@ -89,13 +89,13 @@ const AddModal: React.FC = () => {
       try {
         if (task) {
           await axios.put(
-            "http://localhost:8000/api.php?action=editTask",
+            "http://api:8000/api.php?action=editTask",
             newTask
           );
           editTask(newTask);
         } else {
           const response = await axios.post(
-            "http://localhost:8000/api.php?action=addTask",
+            "http://api:8000/api.php?action=addTask",
             newTask
           );
           if (response.data.status === "success") {

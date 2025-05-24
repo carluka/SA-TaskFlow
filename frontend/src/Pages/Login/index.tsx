@@ -13,7 +13,7 @@ const Login: React.FC = () => {
 
   function handleLogin() {
     axios
-      .post("http://localhost:8000/api.php?action=login", {
+      .post("http://api:8000/api.php?action=login", {
         email: email,
         password: password,
       })
