@@ -130,11 +130,6 @@ const Home: React.FC = () => {
             icon={Folder}
             name="Kategorije"
           ></ExpandSidebarItem>
-          <SidebarItem
-            icon={Settings}
-            name="Nastavitve"
-            isActive={false}
-          ></SidebarItem>
         </S.Tabs>
         <Link
           to="/login"

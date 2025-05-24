@@ -6,6 +6,14 @@ class DbConnect
     private $user = 'root';
     private $pass = 'root';
 
+    public function __construct()
+    {
+        $this->server = getenv('DB_HOST') ?: 'localhost';
+        $this->dbname = getenv('DB_NAME') ?: 'seznamopravil';
+        $this->user   = getenv('DB_USER') ?: 'root';
+        $this->pass   = getenv('DB_PASS') ?: '';
+    }
+
     public function connect()
     {
         try {

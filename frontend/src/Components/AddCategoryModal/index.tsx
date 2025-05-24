@@ -9,14 +9,12 @@ import axios from "axios";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import { AddCategoryType } from "../../Contexts/addCategoryType";
 import { AddCategoryContext } from "../../Contexts/addCategoryContext";
-import { useParams } from "react-router-dom";
 
 interface AddCategoryProps {
   id: number | undefined;
 }
 
 const AddCategoryModal: React.FC<AddCategoryProps> = ({ id }) => {
-  const { name } = useParams<string>();
   const { userData } = useContext(AuthContext) as AuthType;
   const { setShowAddCategory } = useContext(
     AddCategoryContext
@@ -27,11 +25,7 @@ const AddCategoryModal: React.FC<AddCategoryProps> = ({ id }) => {
   var e = document.getElementById("select") as HTMLSelectElement;
   const [nameError, setNameError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (name !== undefined) {
-      setCategoryName(name);
-    }
-  }, [name]);
+  const name = null;
 
   function handleTyping(event: React.ChangeEvent<HTMLInputElement>) {
     setCategoryName(event.target.value);
@@ -80,7 +74,6 @@ const AddCategoryModal: React.FC<AddCategoryProps> = ({ id }) => {
         setShowAddCategory(false);
         id = undefined;
         setNameError(null);
-        //name = null;
       }
     } else {
       setNameError("Naziv ne sme biti prazen.");

@@ -1,15 +1,6 @@
 <?php
 require_once __DIR__ . '/../services/Database.php';
 
-$log_file = __DIR__ . '/log.txt';
-
-function log_data($data)
-{
-    global $log_file;
-    $log_entry = "[" . date('Y-m-d H:i:s') . "] " . $data . "\n";
-    file_put_contents($log_file, $log_entry, FILE_APPEND);
-}
-
 class UserModel
 {
     private $db;
@@ -43,7 +34,6 @@ class UserModel
     public function registerUser($ime, $priimek, $email, $geslo, $obvescanje)
     {
         try {
-            log_data($ime, $priimek, $email, $geslo, $obvescanje);
             $checkQuery = "SELECT * FROM uporabnik WHERE email = :email";
             $stmt = $this->db->prepare($checkQuery);
             $stmt->execute(['email' => $email]);
