@@ -54,7 +54,6 @@ switch ($endpoint) {
     case 'deleteTask':
         if ($request_method === 'DELETE') {
             $input = json_decode(file_get_contents('php://input'), true);
-            log_data($input['id']);
             if (isset($input['id'])) {
                 $taskController = new TaskController();
                 $taskController->deleteTask($input['id']);
@@ -69,7 +68,6 @@ switch ($endpoint) {
     case 'checkTask':
         if ($request_method === 'PUT') {
             $input = json_decode(file_get_contents('php://input'), true);
-            log_data($input);
             if (isset($input)) {
                 $taskController = new TaskController();
                 $taskController->checkTask($input);

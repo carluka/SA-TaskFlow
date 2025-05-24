@@ -35,12 +35,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const formattedDate =
     rok === "0000-00-00 00:00:00" ? null : new Date(rok).toLocaleDateString();
 
-  async function handleCheck() {
-    const response = await axios.put(
-      "http://74.234.179.253:8000/api.php?action=checkTask",
-      id
-    );
-    console.log(response);
+  function handleCheck() {
+    axios.put("http://74.234.179.253:8000/api.php?action=checkTask", id);
     checkTask(id);
   }
 
