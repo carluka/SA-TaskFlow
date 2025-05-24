@@ -98,6 +98,7 @@ const AddModal: React.FC = () => {
             "http://74.234.179.253:8000/api.php?action=addTask",
             newTask
           );
+          console.log(response);
           if (response.data.status === "success") {
             addTask({ ...newTask, id: response.data.id });
           }
