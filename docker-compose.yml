@@ -20,6 +20,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: carluka/task-flow-backend:latest
     restart: always
     env_file: .env
     depends_on:
@@ -35,6 +36,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: carluka/task-flow-frontend:latest
     restart: always
     depends_on:
       - api
