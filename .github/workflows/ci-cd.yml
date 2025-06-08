@@ -12,7 +12,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Pošlji webhook
+      - name: Pošlji webhooka
         env:
           URL: ${{ secrets.WEBHOOK_URL }}
           TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
