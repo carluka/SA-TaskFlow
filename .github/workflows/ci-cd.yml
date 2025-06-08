@@ -39,30 +39,18 @@ jobs:
             carluka/task-flow-${{ matrix.service }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  notify-server:
-    name: Notify Azure VM
-    needs: build-and-push
+  notify:
     runs-on: ubuntu-latest
-    if: needs.build-and-push.result == 'success' && github.ref == 'refs/heads/main'
     steps:
-      - name: Send deployment webhook
-        uses: joelwmale/webhook-action@master
+      - name: Send webhook
+        uses: peter-evans/webhook-action@v2
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-          headers: |
+          method: POST
+          content-type: application/json
+          payload: |
             {
-              "Content-Type": "application/json",
-              "X-Webhook-Token": "${{ secrets.WEBHOOK_SECRET }}",
-              "User-Agent": "GitHub-Actions"
-            }
-          body: |
-            {
-              "repository": "${{ github.repository }}",
-              "services": ["frontend", "backend"],
-              "tag": "latest",
-              "commit": "${{ github.sha }}",
-              "ref": "${{ github.ref }}",
-              "pusher": "${{ github.actor }}",
-              "timestamp": "${{ github.event.head_commit.timestamp }}"
+              "event": "manual-trigger",
+              "actor": "${{ github.actor }}",
+              "time": "${{ github.event.workflow_dispatch.inputs.time }}"
             }

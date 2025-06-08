@@ -144,7 +144,7 @@ const Home: React.FC = () => {
         </Link>
       </S.Sidebar>
       <S.Main>
-        <S.Header>Seznam opravil</S.Header>
+        <S.Header>Seznam opravil - test</S.Header>
         <S.TitleAndFilter>
           <S.Title onClick={handleDone}>Opravila </S.Title>
           <S.FilterField>
