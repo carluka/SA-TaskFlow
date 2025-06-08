@@ -9,10 +9,41 @@ on:
       - main
 
 jobs:
+  build-and-push:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [backend, frontend]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & push ${{ matrix.service }} image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/Dockerfile
+          push: true
+          tags: |
+            carluka/task-flow-${{ matrix.service }}:latest
+            carluka/task-flow-${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
   notify:
     runs-on: ubuntu-latest
+    needs: build-and-push
     steps:
-      - name: Pošlji webhooka
+      - name: Pošlji webhook
         env:
           URL: ${{ secrets.WEBHOOK_URL }}
           TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
